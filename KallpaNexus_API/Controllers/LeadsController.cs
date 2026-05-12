@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using KallpaNexus_API.Data;
 using KallpaNexus_API.Models;
@@ -20,6 +21,7 @@ namespace KallpaNexus_API.Controllers
 
         // POST: api/Leads (Para la pre-inscripción desde el Home)
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> RegistrarLead(Lead lead)
         {
             lead.Date = DateTime.UtcNow;
@@ -30,6 +32,7 @@ namespace KallpaNexus_API.Controllers
 
         // GET: api/Leads (Para tu tabla de administración)
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Lead>>> GetLeads()
         {
             return await _context.Leads.OrderByDescending(l => l.Date).ToListAsync();

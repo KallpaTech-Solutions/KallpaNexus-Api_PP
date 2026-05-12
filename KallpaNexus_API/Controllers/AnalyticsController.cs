@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using KallpaNexus_API.Data;
 using KallpaNexus_API.Models;
@@ -17,6 +18,7 @@ namespace KallpaNexus_API.Controllers
 
         // POST: api/Analytics/track (Recibe cada clic o visita)
         [HttpPost("track")]
+        [AllowAnonymous]
         public async Task<IActionResult> TrackEvent(AnalyticsEvent ev)
         {
             ev.Timestamp = DateTime.UtcNow;
@@ -29,6 +31,7 @@ namespace KallpaNexus_API.Controllers
 
         // 1. Resumen por Sector (Para gráfico de Torta/Pie)
         [HttpGet("summary-sectors")]
+        [Authorize]
         public async Task<IActionResult> GetSectorSummary()
         {
             var data = await _context.AnalyticsEvents
@@ -42,6 +45,7 @@ namespace KallpaNexus_API.Controllers
 
         // 2. Visitas diarias (Para gráfico de Líneas)
         [HttpGet("daily-visits")]
+        [Authorize]
         public async Task<IActionResult> GetDailyVisits()
         {
             var data = await _context.AnalyticsEvents
@@ -55,6 +59,7 @@ namespace KallpaNexus_API.Controllers
 
         // 3. Top botones clickeados (Para tabla de ranking)
         [HttpGet("top-clicks")]
+        [Authorize]
         public async Task<IActionResult> GetTopClicks()
         {
             var data = await _context.AnalyticsEvents
@@ -68,6 +73,7 @@ namespace KallpaNexus_API.Controllers
 
         /// <summary>Rutas con más visitas (eventos tipo VISIT; targetName = ruta).</summary>
         [HttpGet("top-pages")]
+        [Authorize]
         public async Task<IActionResult> GetTopPages()
         {
             var data = await _context.AnalyticsEvents

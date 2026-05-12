@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using KallpaNexus_API.Data;
@@ -20,6 +21,7 @@ namespace KallpaNexus_API.Controllers
 
         /// <summary>Guarda una recomendación anónima (sin nombre, correo ni IP obligatoria).</summary>
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Post([FromBody] RecommendationDto dto)
         {
             if (string.IsNullOrWhiteSpace(dto.Message) || dto.Message.Length > 2000)
@@ -40,8 +42,9 @@ namespace KallpaNexus_API.Controllers
             return Ok(new { id = row.Id });
         }
 
-        /// <summary>Listado reciente para el panel admin (pretotipo sin auth).</summary>
+        /// <summary>Listado reciente para el panel admin.</summary>
         [HttpGet("recent")]
+        [Authorize]
         public async Task<IActionResult> Recent([FromQuery] int take = 30)
         {
             take = Math.Clamp(take, 1, 100);

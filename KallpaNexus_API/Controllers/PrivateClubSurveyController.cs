@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using KallpaNexus_API.Data;
@@ -27,6 +28,7 @@ namespace KallpaNexus_API.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Post([FromBody] SurveyDto? dto)
         {
             if (dto is null)
@@ -75,6 +77,7 @@ namespace KallpaNexus_API.Controllers
         }
 
         [HttpGet("recent")]
+        [Authorize]
         public async Task<IActionResult> Recent([FromQuery] int take = 40)
         {
             take = Math.Clamp(take, 1, 100);
