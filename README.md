@@ -13,6 +13,10 @@ API **ASP.NET Core 8** para el pretotipo KallpaNexus: leads, analíticas, recome
    ```
 4. Arranca la API (perfil **http** / **https** en Visual Studio usa `ASPNETCORE_ENVIRONMENT=Development`). En **Development** no se ejecuta `Migrate()` al iniciar: evitas depender del arranque automático mientras trabajas solo en local.
 
+### CORS desde Vite (`http://localhost:5173`)
+
+Si la consola del navegador dice que no hay cabecera `Access-Control-Allow-Origin` hacia `http://localhost:5062`, comprueba que el API esté en marcha y reinicia el API tras cambios en `Program.cs`. En **Development** no se usa `UseHttpsRedirection`, para que peticiones HTTP al API no reciban un redirect que rompe el preflight CORS frente a Vite.
+
 ## Requisitos
 
 - .NET 8 SDK
