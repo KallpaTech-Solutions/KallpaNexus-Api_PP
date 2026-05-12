@@ -4,8 +4,8 @@ API **ASP.NET Core 8** para el pretotipo KallpaNexus: leads, analíticas, recome
 
 ## Desarrollo local (por ahora)
 
-1. PostgreSQL en marcha (en este equipo el puerto suele ser **5433**; ajústalo en la cadena si el tuyo es otro).
-2. Copia `KallpaNexus_API/appsettings.example.json` a `KallpaNexus_API/appsettings.json` y pon **usuario, contraseña y nombre de base reales**. Ese archivo está en `.gitignore` y no se sube al remoto.
+1. **Cadena de conexión** solo en `KallpaNexus_API/appsettings.json` (está en `.gitignore`, no se sube a Git). `appsettings.Development.json` **no** define `ConnectionStrings`, para que no pise lo que pongas en `appsettings.json`.
+2. Puedes apuntar a **Postgres local** (ej. `Host=localhost;Port=5433;…`) o a la **misma base de Render** que en producción. Desde tu PC suele hacer falta la cadena **External** del panel de Postgres en Render (la **Internal** solo sirve entre servicios dentro de Render). Incluye `SSL Mode=Require;Trust Server Certificate=true` si Render lo exige.
 3. Crea o actualiza el esquema cuando cambien las migraciones:
    ```bash
    cd KallpaNexus_API
