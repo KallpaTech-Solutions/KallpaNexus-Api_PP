@@ -11,6 +11,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 var corsOrigins = builder.Configuration.GetSection("Cors:Origins").Get<string[]>()
     ?? new[]
     {
+        "https://kallpanexus-ui-pp.onrender.com",
         "https://kallpanexus-ui.onrender.com",
         "http://localhost:5173",
         "http://127.0.0.1:5173",
