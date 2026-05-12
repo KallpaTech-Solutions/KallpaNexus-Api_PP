@@ -7,9 +7,21 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// 2. Configurar CORS para React
-builder.Services.AddCors(options => {
-    options.AddPolicy("OpenPolicy", b => b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+// 2. CORS: origen del frontend en Render + Vite en local (WithOrigins no admite * con credenciales)
+var corsOrigins = builder.Configuration.GetSection("Cors:Origins").Get<string[]>()
+    ?? new[]
+    {
+        "https://kallpanexus-ui.onrender.com",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    };
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("OpenPolicy", b =>
+        b.WithOrigins(corsOrigins)
+            .AllowAnyMethod()
+            .AllowAnyHeader());
 });
 
 
