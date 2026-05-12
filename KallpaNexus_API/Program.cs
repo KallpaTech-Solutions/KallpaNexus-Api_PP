@@ -22,7 +22,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy("OpenPolicy", b =>
         b.WithOrigins(corsOrigins)
             .AllowAnyMethod()
-            .AllowAnyHeader());
+            .AllowAnyHeader()
+            .AllowCredentials());
 });
 
 
@@ -41,15 +42,25 @@ if (app.Environment.IsDevelopment())
 }
 
 
-// Usar Swagger y CORS
 app.UseSwagger();
 app.UseSwaggerUI();
-app.UseCors("OpenPolicy");
 
 app.UseHttpsRedirection();
+
+app.UseRouting();
+
+// Tras UseRouting y antes de UseAuthorization (orden relevante para CORS)
+app.UseCors("OpenPolicy");
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Aplica migraciones pendientes (crea/actualiza tablas). Preferible a EnsureCreated si hay carpeta Migrations.
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    context.Database.Migrate();
+}
 
 app.Run();
