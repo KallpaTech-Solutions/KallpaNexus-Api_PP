@@ -56,9 +56,10 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Aplica migraciones pendientes (crea/actualiza tablas). Preferible a EnsureCreated si hay carpeta Migrations.
-using (var scope = app.Services.CreateScope())
+// En producción (p. ej. Render) aplica migraciones al arrancar. En local (Development) hazlo a mano: `dotnet ef database update`.
+if (app.Environment.IsProduction())
 {
+    using var scope = app.Services.CreateScope();
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     context.Database.Migrate();
 }

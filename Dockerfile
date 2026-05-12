@@ -12,5 +12,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 COPY --from=build /app/publish .
 
+ENV ASPNETCORE_ENVIRONMENT=Production
+
 # Render define PORT en runtime; Kestrel debe escuchar en ese puerto
 CMD ["/bin/sh", "-c", "export ASPNETCORE_URLS=http://0.0.0.0:${PORT:-8080}; exec dotnet KallpaNexus_API.dll"]
